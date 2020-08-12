@@ -48,7 +48,7 @@ def home():
         f"/api/v1.0/tobs<br/>"
         f"/api/v1.0/datesearch start:/<start><br/>"
         f"<i>Example datesearch: /api/v1.0/datesearch start:/2017-05-01</i><br/>"
-        f"/api/v1.0/datesearch/start:/<start> end:/<end><br/>"
+        f"/api/v1.0/datesearch/start:/<start>end:/<end><br/>"
         f"<i>Example datasearch: /api/v1.0/datesearch/start:/2017-05-01end:/2018-05-01<i>"
     
     )
@@ -138,14 +138,14 @@ def tobs():
     print("Server received request for 'tobs' page...")
 
 
-# Define what to do when a user hits start/end page
-#/api/v1.0/<start> and /api/v1.0/<start>/<end> will return a json listing the min, avg, and max temperatures for given start/end dates
+# Define what to do when a user hits start
+#/api/v1.0/<start> will return a json listing the min, avg, and max temperatures from the given start date
 @app.route('/api/v1.0/datesearch start:/<start>')
 def start_search(start):
 
     session = Session(engine)
     
-    start_search = session.query(Measurement.date, func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs), ).\
+    start_search = session.query(Measurement.date, func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).\
         filter(func.strftime("%Y-%m-%d",Measurement.date) >= start).group_by(Measurement.date).all()         
 
     #create dict from data and append to a list of search_data
@@ -161,6 +161,9 @@ def start_search(start):
     return jsonify(search_data)
     print("Server received request for 'start_search' page")
 
+
+# Define what to do when a user hits start/end page
+#/api/v1.0/<start> and /api/v1.0/<start>/<end> will return a json listing the min, avg, and max temperatures for given start/end dates
 @app.route('/api/v1.0/datesearch/start:/<start>end:/<end>')
 def start_end_search(start, end):
 
