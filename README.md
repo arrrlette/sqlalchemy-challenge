@@ -40,7 +40,7 @@ To begin, I used Python and SQLAlchemy to do basic climate analysis and data exp
 
 - - -
 
-## Part 5: Climate App
+## Part 4: Climate App
 
 Now that I completed my initial analysis, I designed a Flask API based on the queries that I just developed.
 
